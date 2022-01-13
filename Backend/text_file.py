@@ -51,13 +51,8 @@ class FileManager:
             self.file_text = self.read_text_from_file()
             return self.file_text
 
-    # todo: might contain unnecessary code
-    def write_to_file(self, list_of_lines):
-        with open(f'{self.file_name}', 'w') as newFile:
-            if type(list_of_lines) is list:
-                text = ''.join(list_of_lines)
-            else:
-                text = list_of_lines
+    def write_to_file(self, text):
+        with open(self.file_name, 'w') as newFile:
             newFile.write(text)
 
 
@@ -66,4 +61,4 @@ if __name__ == '__main__':
     # fm.choose_file()
     # print(fm.file_name)
     # fm.save_to_file_text()
-# todo: check if file exists nd before overwriting if duplicate or not
+
