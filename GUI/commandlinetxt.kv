@@ -1,0 +1,38 @@
+# todo: scrollview
+<Grid>
+    text_input: text_input
+    commands: commands
+
+    GridLayout:
+        cols: 2
+        size: root.width, root.height
+        TextInput:
+            id: text_input
+            background_color: 0, 0, 0, 0
+            foreground_color: 0, 1, 0, 1
+            font_name: 'Fonts/consola.ttf'
+            text: root.file_text
+        FloatLayout:
+            size_hint_x: 0.4
+            Label:
+                pos_hint: {'x': .7, 'top': 1.45}
+                text: root.cmd_text
+            GridLayout:
+                pos_hint: {'x':0.01, 'y':0.01}
+                cols: 2
+                size_hint_y: None
+                height: 27
+                Label:
+                    text: '>>>'
+                    size_hint_x: None
+                    width: 24
+                TextInput:
+                    id: commands
+                    # background_color: 1, 1, 1, 0.65
+                    background_color: 0, 0, 0, 0
+                    foreground_color: 1, 1, 1, 1
+                    cursor_color: 1, 1, 1, 1
+                    font_name: 'Fonts/consola.ttf'
+                    multiline: False
+                    text_validate_unfocus: False
+                    on_text_validate: root.detect_enter()
