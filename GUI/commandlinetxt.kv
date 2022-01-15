@@ -1,5 +1,5 @@
 # todo: scrollview
-<Grid>
+<rootGrid>
     text_input: text_input
     commands: commands
 
@@ -12,13 +12,14 @@
             foreground_color: 0, 1, 0, 1
             font_name: 'Fonts/consola.ttf'
             text: root.file_text
-        FloatLayout:
+        GridLayout:
             size_hint_x: 0.4
+            rows: 2
             Label:
-                pos_hint: {'x': .7, 'top': 1.45}
+                # pos_hint: {'x': .7, 'top': 1.45}
                 text: root.cmd_text
             GridLayout:
-                pos_hint: {'x':0.01, 'y':0.01}
+                #pos_hint: {'x':0.01, 'y':0.01}
                 cols: 2
                 size_hint_y: None
                 height: 27
