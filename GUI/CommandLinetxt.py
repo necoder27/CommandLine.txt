@@ -1,14 +1,16 @@
 import os
 from kivy import Config
 from kivy.app import App
+from kivy.uix.textinput import TextInput
 from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty, StringProperty
 from Backend.text_file import FileManager, remove_file
+from kivy.base import EventLoop
 
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 
 
-class Grid(Widget):
+class RootGrid(Widget):
     text_input = ObjectProperty(None)
     commands = ObjectProperty(None)
     cmd_text = StringProperty()
@@ -16,6 +18,8 @@ class Grid(Widget):
     label_text = ''
     string_for_anything = ''
     fm = FileManager()
+    unrec = 'unrecognized command'
+    simcfile = 'similar:\ncfile [sum_file_name]'
 
     def detect_enter(self):
         text_input_text = self.commands.text
@@ -26,7 +30,7 @@ class Grid(Widget):
         self.commands.text = ''
 
     def add_to_cmd_label(self, text_input_text):
-        if text_input_text == 'unrecognized command':
+        if text_input_text == self.unrec or text_input_text == self.simcfile:
             self.label_text = self.label_text + '\n' + text_input_text
         elif self.label_text != '':
             self.label_text = self.label_text + '\n>>> ' + text_input_text
@@ -46,7 +50,7 @@ class Grid(Widget):
             if words[0] == 'cfile' and len(words) == 2:
                 self.cfile(com)
             else:
-                self.add_to_cmd_label('unrecognized command')
+                self.add_to_cmd_label(self.simcfile)
         elif com == 'y':
             if self.string_for_anything != '':
                 self.create_file(self.string_for_anything)
@@ -56,7 +60,7 @@ class Grid(Widget):
         elif com == 'rfile':
             self.rfile()
         else:
-            self.add_to_cmd_label('unrecognized command')
+            self.add_to_cmd_label(self.unrec)
 
     def print_commands(self):
         help_comms = 'Commands:\n/? -- help\nopenf -- open file\nsfile -- save file\n' \
@@ -97,8 +101,10 @@ class Grid(Widget):
 class CommandLineTxt(App):
     def build(self):
         self.icon = 'Icon/qtecat.png'
-        return Grid()
+        return RootGrid()
 
 
 if __name__ == '__main__':
     CommandLineTxt().run()
+
+# EventLoop.window.title = self.fm.folder_path

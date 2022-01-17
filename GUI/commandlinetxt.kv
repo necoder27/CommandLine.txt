@@ -1,4 +1,3 @@
-# todo: scrollview
 <rootGrid>
     text_input: text_input
     commands: commands
@@ -15,9 +14,15 @@
         GridLayout:
             size_hint_x: 0.4
             rows: 2
-            Label:
-                # pos_hint: {'x': .7, 'top': 1.45}
-                text: root.cmd_text
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+                Label:
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    text_size: self.width, None
+                    padding: 0, 10
+                    text: root.cmd_text
             GridLayout:
                 #pos_hint: {'x':0.01, 'y':0.01}
                 cols: 2
