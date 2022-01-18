@@ -5,12 +5,18 @@
     GridLayout:
         cols: 2
         size: root.width, root.height
-        TextInput:
-            id: text_input
-            background_color: 0, 0, 0, 0
-            foreground_color: 0, 1, 0, 1
-            font_name: 'Fonts/consola.ttf'
-            text: root.file_text
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            effect_cls: 'ScrollEffect'
+            TextInput:
+                id: text_input
+                size_hint: 1, None
+                height: max(self.minimum_height, text_input.height)
+                background_color: 0, 0, 0, 0
+                foreground_color: 0, 1, 0, 1
+                font_name: 'Fonts/consola.ttf'
+                text: root.file_text
         GridLayout:
             size_hint_x: 0.4
             rows: 2
@@ -42,3 +48,5 @@
                     multiline: False
                     text_validate_unfocus: False
                     on_text_validate: root.detect_enter()
+
+    # todo: changing text color: list variable in root foreground_color: root.text_color, with command changeable

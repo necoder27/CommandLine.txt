@@ -1,7 +1,6 @@
 import os
 from kivy import Config
 from kivy.app import App
-from kivy.uix.textinput import TextInput
 from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty, StringProperty
 from Backend.text_file import FileManager, remove_file
@@ -19,7 +18,7 @@ class RootGrid(Widget):
     string_for_anything = ''
     fm = FileManager()
     unrec = 'unrecognized command'
-    simcfile = 'similar:\ncfile [sum_file_name]'
+    simcfile = 'similar:\ncfile [sum_file_name].[file_extension]'
 
     def detect_enter(self):
         text_input_text = self.commands.text
@@ -64,7 +63,7 @@ class RootGrid(Widget):
 
     def print_commands(self):
         help_comms = 'Commands:\n/? -- help\nopenf -- open file\nsfile -- save file\n' \
-                     'cfile [sum_file_name] -- save a newly created file\n' \
+                     'cfile [sum_file_name].[file_extension] -- save a newly created file\n' \
                      'rfile -- delete a file'
         self.add_to_cmd_label(help_comms)
 
@@ -79,7 +78,7 @@ class RootGrid(Widget):
 
     def cfile(self, com):
         if self.fm.save_to_files_in_folder():
-            file_name = os.path.normpath(self.fm.folder_path + '/' + com.replace('cfile ', '') + '.txt')
+            file_name = os.path.normpath(self.fm.folder_path + '/' + com.replace('cfile ', ''))
             self.string_for_anything = file_name
             if file_name not in self.fm.files_in_folder:
                 self.create_file(file_name)
