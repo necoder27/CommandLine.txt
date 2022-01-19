@@ -17,6 +17,7 @@ class RootGrid(Widget):
     label_text = ''
     duplicate_file_check = ''
     text_color = ListProperty([0, 1, 0, 1])
+    commands_color = ListProperty([1, 1, 1, 1])
     colors_dictionary = {
         'r': [1, 0, 0, 1],
         'g': [0, 1, 0, 1],
@@ -65,8 +66,8 @@ class RootGrid(Widget):
             pass
         elif com == 'rfile':
             self.rfile()
-        elif 'textcolor' in com:
-            self.command_textcolor(com)
+        elif 'textcolor' in com or 'commandscolor' in com:
+            self.command_textcolor_commandscolor(com)
         else:
             self.add_to_cmd_label(self.add_to_cmd_label_wo_signs[0])
 
@@ -77,12 +78,14 @@ class RootGrid(Widget):
         else:
             self.add_to_cmd_label(self.add_to_cmd_label_wo_signs[1])
 
-    def command_textcolor(self, com):
+    def command_textcolor_commandscolor(self, com):
         words = com.split()
         if len(words) == 2:
-            if words[0] == 'textcolor' and words[1] in self.colors_dictionary:
-                self.change_text_color(words[1])
-                print('u get pizza')
+            if words[1] in self.colors_dictionary:
+                if words[0] == 'textcolor':
+                    self.change_text_color(words[1])
+                elif words[0] == 'commandscolor':
+                    self.change_commands_color(words[1])
             elif words[1] == '/?':
                 self.list_all_colors()
             else:
@@ -129,6 +132,9 @@ class RootGrid(Widget):
 
     def change_text_color(self, color):
         self.text_color = self.colors_dictionary[color]
+
+    def change_commands_color(self, color):
+        self.commands_color = self.colors_dictionary[color]
 
     def list_all_colors(self):
         colors = 'Initials of available colors:\n'

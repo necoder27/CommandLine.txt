@@ -24,6 +24,7 @@
                 do_scroll_x: False
                 do_scroll_y: True
                 Label:
+                    color: root.commands_color
                     size_hint_y: None
                     height: self.texture_size[1]
                     text_size: self.width, None
@@ -36,13 +37,14 @@
                 height: 27
                 Label:
                     text: '>>>'
+                    color: root.commands_color
                     size_hint_x: None
                     width: 24
                 TextInput:
                     id: commands
                     # background_color: 1, 1, 1, 0.65
                     background_color: 0, 0, 0, 0
-                    foreground_color: 1, 1, 1, 1
+                    foreground_color: root.commands_color
                     cursor_color: 1, 1, 1, 1
                     font_name: 'Fonts/consola.ttf'
                     multiline: False
