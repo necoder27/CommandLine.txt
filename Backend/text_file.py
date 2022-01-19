@@ -31,6 +31,7 @@ class FileManager:
 
     def get_files_from_folder(self):
         return [os.path.normpath(file) for file in glob.glob(f'{self.folder_path}/*.txt')]
+        # return os.listdir()
 
     def save_to_files_in_folder(self):
         self.folder_path = tk_folder_chooser()
@@ -45,6 +46,8 @@ class FileManager:
 
     def choose_file(self):
         self.file_name = tk_file_chooser()
+        if self.file_name != '':
+            self.folder_path = os.path.dirname(self.file_name)
 
     def save_to_file_text(self):
         if self.file_name != '':

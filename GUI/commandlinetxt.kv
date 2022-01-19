@@ -14,7 +14,7 @@
                 size_hint: 1, None
                 height: max(self.minimum_height, text_input.height)
                 background_color: 0, 0, 0, 0
-                foreground_color: 0, 1, 0, 1
+                foreground_color: root.text_color
                 font_name: 'Fonts/consola.ttf'
                 text: root.file_text
         GridLayout:
@@ -48,5 +48,3 @@
                     multiline: False
                     text_validate_unfocus: False
                     on_text_validate: root.detect_enter()
-
-    # todo: changing text color: list variable in root foreground_color: root.text_color, with command changeable
