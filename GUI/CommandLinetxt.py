@@ -29,7 +29,8 @@ class RootGrid(Widget):
         'unrecognized command',
         'similar:\ncfile [file_name].[file_extension]',
         'invalid color',
-        'incomplete command'
+        'incomplete command',
+        fm.not_readable
     ]
 
     def detect_enter(self):
@@ -104,8 +105,11 @@ class RootGrid(Widget):
     def openf(self):
         self.fm.choose_file()
         file_text = self.fm.save_to_file_text()
-        input_text = ''.join(file_text)
-        self.file_text = input_text
+        if file_text == self.fm.not_readable:
+            self.add_to_cmd_label(file_text)
+        else:
+            input_text = ''.join(file_text)
+            self.file_text = input_text
 
     def sfile(self):
         self.fm.write_to_file(self.text_input.text)
@@ -154,5 +158,5 @@ if __name__ == '__main__':
     CommandLineTxt().run()
 
 # EventLoop.window.title = self.fm.folder_path
-# todo: try catch for opening files of any file type
 # todo: adding colors to colors_dictionary
+# todo: case insensitive

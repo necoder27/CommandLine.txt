@@ -23,6 +23,8 @@ def remove_file():
 
 
 class FileManager:
+    not_readable = 'error: file could not be opened'
+
     def __init__(self):
         self.folder_path = ''
         self.file_name = ''
@@ -31,7 +33,6 @@ class FileManager:
 
     def get_files_from_folder(self):
         return [os.path.normpath(file) for file in glob.glob(f'{self.folder_path}/*.txt')]
-        # return os.listdir()
 
     def save_to_files_in_folder(self):
         self.folder_path = tk_folder_chooser()
@@ -42,7 +43,10 @@ class FileManager:
 
     def read_text_from_file(self):
         with open(self.file_name, 'r') as newFile:
-            return newFile.readlines()
+            try:
+                return newFile.readlines()
+            except:
+                return self.not_readable
 
     def choose_file(self):
         self.file_name = tk_file_chooser()
@@ -50,9 +54,12 @@ class FileManager:
             self.folder_path = os.path.dirname(self.file_name)
 
     def save_to_file_text(self):
-        if self.file_name != '':
-            self.file_text = self.read_text_from_file()
+        text = self.read_text_from_file()
+        if self.file_name != '' and text != self.not_readable:
+            self.file_text = text
             return self.file_text
+        elif text == self.not_readable:
+            return text
 
     def write_to_file(self, text):
         with open(self.file_name, 'w') as newFile:
@@ -65,3 +72,4 @@ if __name__ == '__main__':
     # print(fm.file_name)
     # fm.save_to_file_text()
 
+# return os.listdir()
