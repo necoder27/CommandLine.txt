@@ -97,9 +97,10 @@ class RootGrid(Widget):
     def print_commands(self):
         help_comms = 'Commands:\n/? -- help\nopenf -- open file\nsfile -- save file\n' \
                      'cfile [file_name].[file_extension] -- save a newly created file\n' \
-                     'rfile -- delete a file' \
+                     'rfile -- delete a file\n' \
                      'textcolor /? -- all choosable colors\n' \
-                     'textcolor [sum_color] -- change text color of file text'
+                     'textcolor [sum_color] -- change text color of file text\n' \
+                     'commandscolor [sum_color] -- change text color of commands'
         self.add_to_cmd_label(help_comms)
 
     def openf(self):
