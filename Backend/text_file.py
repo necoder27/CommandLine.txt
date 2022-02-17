@@ -36,26 +36,27 @@ class FileManager:
 
     def save_to_files_in_folder(self):
         self.folder_path = tk_folder_chooser()
+        print(self.folder_path)
         if self.folder_path != '':
             self.files_in_folder = self.get_files_from_folder()
             return True
         return False
 
-    def read_text_from_file(self):
-        with open(self.file_name, 'r') as newFile:
-            try:
+    def read_text_from_file(self, file_name):
+        try:
+            with open(file_name, 'r') as newFile:
                 return newFile.readlines()
-            except:
-                return self.not_readable
+        except:
+            return self.not_readable
 
     def choose_file(self):
         self.file_name = tk_file_chooser()
         if self.file_name != '':
             self.folder_path = os.path.dirname(self.file_name)
 
-    def save_to_file_text(self):
-        text = self.read_text_from_file()
-        if self.file_name != '' and text != self.not_readable:
+    def save_to_file_text(self, file_name):
+        text = self.read_text_from_file(file_name)
+        if file_name != '' and text != self.not_readable:
             self.file_text = text
             return self.file_text
         elif text == self.not_readable:

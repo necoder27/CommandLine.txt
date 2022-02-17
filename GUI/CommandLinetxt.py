@@ -4,7 +4,8 @@ from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty, StringProperty, ListProperty
 from Backend.text_file import FileManager, remove_file
-from kivy.base import EventLoop
+from Backend.navigation import Navigation
+# from kivy.base import EventLoop
 
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 
@@ -25,9 +26,9 @@ class RootGrid(Widget):
         'w': [1, 1, 1, 1]
     }
     fm = FileManager()
+    nv = Navigation()
     add_to_cmd_label_wo_signs = [
         'unrecognized command',
-        'similar:\ncfile [file_name].[file_extension]',
         'invalid color',
         'incomplete command',
         fm.not_readable
@@ -43,11 +44,11 @@ class RootGrid(Widget):
 
     def add_to_cmd_label(self, text_input_text):
         if text_input_text in self.add_to_cmd_label_wo_signs:
-            self.label_text = self.label_text + '\n' + text_input_text
+            self.label_text += '\n' + text_input_text
         elif self.label_text != '':
-            self.label_text = self.label_text + '\n>>> ' + text_input_text
+            self.label_text += f'\n{self.nv.path}> ' + text_input_text
         else:
-            self.label_text = '>>> ' + text_input_text
+            self.label_text = f'{self.nv.path}> ' + text_input_text
 
     def command(self, com):
         com = com.strip()
@@ -55,10 +56,30 @@ class RootGrid(Widget):
             self.print_commands()
         elif com == 'openf':
             self.openf()
+        elif com == 'dir':
+            self.dir_command()
+        elif com == 'folders':
+            self.folders_command()
+        elif com == 'files':
+            self.files_command()
+        elif 'cd' in com:
+            try:
+                self.cd_command(self.split_commands(com)[1])
+            except TypeError as error:
+                pass
+        elif 'open' in com:
+            try:
+                self.open(self.split_commands(com)[1])
+            except (TypeError, FileNotFoundError) as error:
+                if isinstance(error, TypeError):
+                    print('i am a type error uwu')
         elif com == 'sfile':
             self.sfile()
         elif 'cfile' in com:
-            self.command_cfile(com)
+            try:
+                self.cfile(self.split_commands(com)[1])
+            except TypeError:
+                pass
         elif com == 'y':
             if self.duplicate_file_check != '':
                 self.create_file(self.duplicate_file_check)
@@ -72,12 +93,13 @@ class RootGrid(Widget):
         else:
             self.add_to_cmd_label(self.add_to_cmd_label_wo_signs[0])
 
-    def command_cfile(self, com):
+    def split_commands(self, com):
         words = com.split()
-        if words[0] == 'cfile' and len(words) == 2:
-            self.cfile(com)
+        # todo: if words[0] in commands_list:
+        if len(words) == 2:
+            return words
         else:
-            self.add_to_cmd_label(self.add_to_cmd_label_wo_signs[1])
+            self.add_to_cmd_label(self.add_to_cmd_label_wo_signs[0])
 
     def command_textcolor_commandscolor(self, com):
         words = com.split()
@@ -105,19 +127,48 @@ class RootGrid(Widget):
 
     def openf(self):
         self.fm.choose_file()
-        file_text = self.fm.save_to_file_text()
+        file_text = self.fm.save_to_file_text(self.fm.file_name)
         if file_text == self.fm.not_readable:
             self.add_to_cmd_label(file_text)
         else:
             input_text = ''.join(file_text)
             self.file_text = input_text
 
+    def dir_command(self):
+        self.listing_from_directories(self.nv.dir_command())
+
+    def folders_command(self):
+        self.listing_from_directories(self.nv.folders_command())
+
+    def files_command(self):
+        self.listing_from_directories(self.nv.files_command())
+
+    def listing_from_directories(self, content_list):
+        content = '\n'.join(content_list)
+        self.add_to_cmd_label_wo_signs.append(content)
+        self.add_to_cmd_label(content)
+        self.add_to_cmd_label_wo_signs.remove(content)
+
+    def cd_command(self, dir_name):
+        self.nv.cd_command(dir_name)
+
+    def open(self, file_name):
+        try:
+            file_text = self.fm.save_to_file_text(self.nv.open(file_name))
+            if file_text == self.fm.not_readable:
+                self.add_to_cmd_label(file_text)
+            else:
+                input_text = ''.join(file_text)
+                self.file_text = input_text
+        except TypeError:
+            pass
+
     def sfile(self):
         self.fm.write_to_file(self.text_input.text)
 
     def cfile(self, com):
         if self.fm.save_to_files_in_folder():
-            file_name = os.path.normpath(self.fm.folder_path + '/' + com.replace('cfile ', ''))
+            file_name = os.path.normpath(self.fm.folder_path + '/' + com)
             self.duplicate_file_check = file_name
             if file_name not in self.fm.files_in_folder:
                 self.create_file(file_name)
@@ -160,4 +211,8 @@ if __name__ == '__main__':
 
 # EventLoop.window.title = self.fm.folder_path
 # todo: adding colors to colors_dictionary
-# todo: case insensitive
+# todo: case insensitive commands
+# todo: cd search whether folder exists not whether command has correct amount of words
+# todo: cd ..
+# todo: class for every command and methods for options
+# todo: add does not exist error to label
