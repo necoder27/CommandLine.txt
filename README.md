@@ -1,5 +1,5 @@
 # CommandLine.txt
-WIP
+DISCONTINUED
 
 GUI: Kivy Python Framework
 
